@@ -1,5 +1,5 @@
-from rsi import *
-from bollinger import *
+from indicators.rsi import *
+from indicators.bollinger import *
 
 def main():
     get_rsi('BTC')

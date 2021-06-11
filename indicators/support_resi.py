@@ -1,14 +1,7 @@
-from functools import reduce
-from utils.yaml_utils import *
-import requests
-import ast
-import pandas as pd
-import json
-import pandas as md
-from price import *
+from indicators.price import *
 from utils.colors import *
 
-YAML_LIST_NAME = yaml_to_dict(f'/Users/kevinteng/Perso/work/req_bin/ressources/coin.yaml')
+YAML_LIST_NAME = yaml_to_dict(f'/ressources/coin.yaml')
 
 
 

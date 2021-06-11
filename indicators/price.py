@@ -11,12 +11,9 @@ from utils.colors import *
 
 
 def get_price(coin:str):
-    if coin == 'BTC':
-        currency = 'USDT'
-        price = requests.get(f'https://api.binance.com/api/v1/ticker/price?symbol={coin.upper()}{currency}')
-    else:
-        currency = 'USDT'
-        price = requests.get(f'https://api.binance.com/api/v1/ticker/price?symbol={coin.upper()}{currency}')
+    
+    currency = 'USDT'
+    price = requests.get(f'https://api.binance.com/api/v1/ticker/price?symbol={coin.upper()}{currency}')
     dic = str_to_dict(price.text)
     print(f"{bcolors.BOLD}{coin}{bcolors.ENDC} ACTUAL PRICE :{bcolors.YELLOW} {dic['price']} {currency}")
     return price
@@ -37,8 +34,6 @@ def get_df(coin: str, hours=1, period=14, daily=False):
                         'CLOSE': a[i][4], 'VOLUME': a[i][5],
                         'CLOSE_TIME': a[i][6], 'QUOTE_ASSET_VOLUME': a[i][7],
                         'NUMBER_OF_TRADES': a[i][8]}, ignore_index=True)
-
-    # print(f"Coin Name : {bcolors.BOLD} {coin}BTC ")
     return df[500-period:]
 
 if __name__ == '__main__':

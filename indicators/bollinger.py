@@ -1,7 +1,5 @@
-import pandas as pd
-import numpy as pd
-from price import *
-import matplotlib.pyplot as plt
+from indicators.price import *
+
 
 def get_bollinger(coin: str, hours: int = 4):
     df = get_df(coin,period=20, hours=hours)

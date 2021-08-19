@@ -1,3 +1,6 @@
 Kevin TENG
 Personal project
-Indicator of overbuy or oversell 
+
+Bollinger BANDS
+RSI
+Overbuy or Oversell

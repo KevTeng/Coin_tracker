@@ -6,7 +6,6 @@ def get_rsi(coin: str, hours = 4): #4 hours by default
     average_gain = 0
     average_loss = 0
     rs = 0
-    # print('debug1')
     gain = []
     loss = []
     df = get_df(coin, hours)

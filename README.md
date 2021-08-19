@@ -1,1 +1,3 @@
-# Binance_signal
+Kevin TENG
+Personal project
+Indicator of overbuy or oversell 

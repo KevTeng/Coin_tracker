@@ -2,9 +2,9 @@ from indicators.rsi import *
 from indicators.bollinger import *
 
 def main():
-    get_rsi('BTC')
-    get_bollinger('BTC')
-    get_price('BTC')
-
+    infos = Coin('BTC')
+    infos.get_price()
+    rsi = RSI('BTC')
+    rsi.get()
 if __name__ == '__main__':
     main()

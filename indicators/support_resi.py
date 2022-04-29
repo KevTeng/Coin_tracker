@@ -1,3 +1,4 @@
+from functools import reduce
 from indicators.price import *
 from utils.colors import *
 
@@ -7,7 +8,7 @@ YAML_LIST_NAME = yaml_to_dict(f'/ressources/coin.yaml')
 
 
 
-def get_info(df: md.DataFrame):
+def get_info(df: pd.DataFrame):
     high = reduce(lambda x, y: x if x > y else y, df.HIGH)
     low = reduce(lambda x, y: x if x < y else y, df.HIGH)
     close = df.iloc[len(df)-1].CLOSE

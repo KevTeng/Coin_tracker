@@ -1,42 +1,39 @@
-from functools import reduce
-from utils.yaml_utils import *
 import requests
-import ast
 import pandas as pd
-import json
-import pandas as md
-import numpy as np
 from utils.python_utils import str_to_dict
+from utils.yaml_utils import *
 from utils.colors import *
 
+URL_BASE = yaml_to_dict('ressources/path.yaml')
 
-def get_price(coin:str):
-    
-    currency = 'USDT'
-    price = requests.get(f'https://api.binance.com/api/v1/ticker/price?symbol={coin.upper()}{currency}')
-    dic = str_to_dict(price.text)
-    print(f"{bcolors.BOLD}{coin}{bcolors.ENDC} ACTUAL PRICE :{bcolors.YELLOW} {dic['price']} {currency}")
-    return price
 
-def get_df(coin: str, hours=1, period=14, daily=False):
-    if daily:
-        r = requests.get(f'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval={hours}d')
-    else:
-        if coin == 'BTC':
-            r = requests.get(f'https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval={hours}h')
+class Coin:
+    def __init__(self, coin:str, hours=4):
+        self.coin = coin
+        self.hours = hours
+
+    def get_price(self):
+        currency = 'USDT'
+        price = requests.get(f'{URL_BASE["path"]["base_url"]}/ticker/price?symbol={self.coin.upper()}{currency}')
+        dic = str_to_dict(price.text)
+        print(f"{bcolors.BOLD}{self.coin}{bcolors.ENDC} ACTUAL PRICE :{bcolors.YELLOW} {dic['price']} {currency}")
+        return price
+
+    def get_df(self, period=0, daily=False):
+        if daily:
+            r = requests.get(f'{URL_BASE["path"]["base_url"]}/klines?symbol=BTCUSDT&interval={self.hours}d')
         else:
-            r = requests.get(f'https://api.binance.com/api/v3/klines?symbol={coin.upper()}USDT&interval={hours}h')
-    aa = r.json()
-    a = np.array(aa)
-    df = md.DataFrame()
-    for i in range(len(a)):
-        df = df.append({'OPEN_TIME': a[i][0], 'OPEN': a[i][1], 'HIGH': a[i][2], 'LOW': a[i][3],
-                        'CLOSE': a[i][4], 'VOLUME': a[i][5],
-                        'CLOSE_TIME': a[i][6], 'QUOTE_ASSET_VOLUME': a[i][7],
-                        'NUMBER_OF_TRADES': a[i][8]}, ignore_index=True)
-    return df[500-period:]
+            if self.coin == 'BTC':
+                r = requests.get(f'{URL_BASE["path"]["base_url"]}/klines?symbol=BTCUSDT&interval={self.hours}h')
+            else:
+                r = requests.get(f'{URL_BASE["path"]["base_url"]}/klines?symbol={self.coin.upper()}USDT&interval={self.hours}h')
+        json_response = r.json()
+        df = pd.DataFrame.from_dict(json_response)
+        headers = ['OPEN_TIME', 'OPEN', 'HIGH', 'LOW', 'CLOSE', 'VOLUME', 'CLOSE_TIME', 'QUOTE_ASSET_VOLUME', 'NB_OF_TRADES', 'TAKER_BUY_BASE_ASSET_VOLUME', 'TAKER_BUY_QUOTE_ASSET_VOLUME', 'IGNORE']
+        df.set_axis(headers, axis=1, inplace=True)
+        return df[500-period:]
 
 if __name__ == '__main__':
-    # get_df('THETA')
-    price = requests.get(f'https://api.binance.com/api/v1/ticker/price?symbol=BTCUSDT')
-    pass
+    info = Coin('BTC')
+    info.get_price()
+    print(info.get_df().head())
